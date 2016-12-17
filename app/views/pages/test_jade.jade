@@ -1,0 +1,24 @@
+html
+  head
+    // 引用jQuery
+    script(src='/static/js/jquery.min.js')
+    // 引用Vue
+    script(src='/static/js/vue.js')
+    script.
+      // 初始化代码:
+      $(function () {
+      var vm = new Vue({
+      el: '#vm',
+      data: {
+      name: 'Robot',
+      age: 15
+      }
+      });
+      window.vm = vm;
+      });
+  body
+    #vm
+      p Hello, {{ name }}!
+      p You are {{ age }} years old!
+      p {{ttt}}
+  html

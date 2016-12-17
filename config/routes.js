@@ -51,6 +51,8 @@ module.exports = function(app){
   // {"note":{"userObject":"5849349cf210182bbc28713b","htObject":"584938c2f210182bbc287143","timelength":3}}
   app.post('/note/new', Note.new);
 
+  app.get('/note/:noteId', Note.findNoteInfo);
+
   // in postman, get cannot have body
   // localhost:3000/notes/58493581f210182bbc28713f
   app.get('/notes/:managerId', Note.findNotesByManagerId);

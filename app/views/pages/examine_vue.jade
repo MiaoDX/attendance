@@ -1,0 +1,129 @@
+extends ../layout
+
+block content
+  //- main container
+  .content
+    .container-fluid
+      #pad-wrapper.gallery
+        .row-fluid.header
+        h3 请假审批
+        p
+          // gallery wrapper
+          .gallery-wrapper
+            .row.gallery-row
+              #notesVue
+                #vfor(v-for="note in notes")
+                  // single note
+                  .span4.img-container
+                    .popup
+                      h5 请假条
+                      .thumb
+                        img(src='/img/gallery-preview.jpg')
+                      .title
+                        input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.user.userRealName")
+                        input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.holidayType.holidayName")
+                        input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.timeLength")
+                        input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.startTime")
+                      .description
+                        h6 请假原因
+                        textarea(readonly='readonly', v-bind:value="note.reason")
+                        input.btn-glow.primary(type='submit', onclick="_change_note_state({{note._id}}, false)", value='驳回')
+                        input.btn-glow.primary(type='submit', onclick="_change_note_state({{note._id}}, true)", value='同意')
+                    //-  end single note
+            //- end gallery wrapper
+  //- end main container
+
+  // this page scripts
+  script(src='http://code.jquery.com/jquery-latest.js')
+  script(src='/js/bootstrap.min.js')
+  script(src='/js/theme.js')
+
+  script(src='https://unpkg.com/vue@2.0.1/dist/vue.js') // CDN
+  script(src='/js/note_c.js')
+  script(type='text/javascript').
+    $(function () {
+      var demo = new Vue({
+        el: '#notesVue',
+        data: {
+                notes:[
+                    {
+                      "_id": "5853fab72e5baac361a430d7",
+                      "user": {
+                        "_id": "584aab9f23ac5520a7cf0947",
+                        "userRole": "584aab46b4f2d71f8a186278",
+                        "userPwd": "a1",
+                        "userName": "a1",
+                        "userDepartment": "A",
+                        "userEmail": "a1@qq.com",
+                        "userRealName": "王晓红",
+                        "__v": 0,
+                        "meta": {
+                          "updateAt": "2016-12-09T13:03:27.258Z",
+                          "createAt": "2016-12-09T13:03:27.258Z"
+                        }
+                      },
+                      "holidayType": {
+                        "_id": "5853ee462e5baac361a430c9",
+                        "holidayName": "事假",
+                        "holidayLength": 4,
+                        "__v": 0,
+                        "meta": {
+                          "updateAt": "2016-12-16T21:51:20.420Z",
+                          "createAt": "2016-12-16T21:51:20.420Z"
+                        }
+                      },
+                      "startTime": "2016-12-17T00:00:00.000Z",
+                      "timeLength": 0.5,
+                      "reason": "放松一下",
+                      "curState": 1,
+                      "highState": 10,
+                      "__v": 0,
+                      "meta": {
+                        "updateAt": "2016-12-16T13:01:58.102Z",
+                        "createAt": "2016-12-16T13:01:58.102Z"
+                      }
+                    },
+                    {
+                      "_id": "5853fcae2e5baac361a430db",
+                      "user": {
+                        "_id": "584fb58932682f19ccade5e8",
+                        "userRole": "584fb49932682f19ccade5e6",
+                        "userName": "b",
+                        "userPwd": "b",
+                        "userDepartment": "B",
+                        "userEmail": "b@qq.com",
+                        "userRealName": "王b部门",
+                        "__v": 0,
+                        "meta": {
+                          "updateAt": "2016-12-13T08:47:05.381Z",
+                          "createAt": "2016-12-13T08:47:05.381Z"
+                        }
+                      },
+                      "holidayType": {
+                        "_id": "5853eefd2e5baac361a430cc",
+                        "holidayName": "工伤假",
+                        "holidayLength": 0,
+                        "__v": 0,
+                        "meta": {
+                          "updateAt": "2016-12-16T21:51:20.420Z",
+                          "createAt": "2016-12-16T21:51:20.420Z"
+                        }
+                      },
+                      "startTime": "2016-11-20T00:00:00.000Z",
+                      "timeLength": 15,
+                      "reason": "被豆腐砸到了",
+                      "curState": 1,
+                      "highState": 30,
+                      "__v": 0,
+                      "meta": {
+                        "updateAt": "2016-12-16T13:01:58.102Z",
+                        "createAt": "2016-11-20T13:01:58.102Z"
+                      }
+                    }
+                  ]
+        },
+        methods: {
+        
+        }
+      })
+    });

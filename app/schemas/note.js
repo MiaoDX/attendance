@@ -56,9 +56,9 @@ NoteSchema.statics = {
             .sort("meta.updateAt")
             .exec(cb);
   },
-
   //根据 state 取出数据单条数据
   findByState: function(state, cb){
+    console.log('prepare to find notes by state: ' + state);
     return this
             .find({curState : state}).populate('user').populate('holidayType')
             .sort("meta.updateAt")

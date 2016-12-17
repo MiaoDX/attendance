@@ -125,12 +125,12 @@ exports.findNotesByManagerId = function (req, res, next){
   .then(function(role){
     Note.findByState(role.preState)
     .then(function(notes){
-      debug('Find all notes by manager preState, notes.length:' + notes.length);
-      // return res.send(notes);
-      res.render('examine', {
-            title: "待审核假期",
-            notes: notes
-      });
+      debug('Find all notes by manager preState:%s, notes.length:%s', role.preState,notes.length);
+      return res.send(notes);
+      // return res.render('examine', {
+      //       title: "待审核假期",
+      //       notes: notes
+      // });
     });
   })
   .catch(next);
@@ -211,6 +211,19 @@ exports.updateStateByManager = function (req, res, next){
         res.send(changedInfo);
       });
     });
+  })
+  .catch(next);
+};
+
+
+exports.findNoteInfo = function(req, res, next){
+  var noteId = req.params.noteId;
+  debug(debugNewRequest + 'Get params from front end,noteId: ' + noteId);
+  Note.findById(noteId)
+  .then(function(note){
+    debug('Found note by noteId %s:\n%s', noteId, note);
+    debug('note curState: ' + note.curState);
+    res.send(note);
   })
   .catch(next);
 };
