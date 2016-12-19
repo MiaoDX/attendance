@@ -192,6 +192,24 @@ function _findNotesByManagerId(managerId){
 }
 
 
+exports.findManagerCanHandleNotes_API = function (req, res, next) {
+  debugRequest(req);
+  //从session 中
+  var _user = req.session.user;
+  var managerId = _user._id;
+
+  _findNotesByManagerId(managerId)
+  .then(function(notes){
+    debug('Find all notes by manager preState, notes.length:' + notes.length);
+    var dataToSend = {};
+    dataToSend.title = '待审核假期';
+    dataToSend.notes = notes;
+    res.json(dataToSend);
+  })
+  .catch(next);
+};
+
+
 exports.findManagerCanHandleNotes = function (req, res, next){
   debugRequest(req);
   //从session 中
@@ -248,8 +266,6 @@ exports.updateStateByManager = function (req, res, next){
   var approvedStr = req.body.approved; // seems cannot get boolean from ajax, but can from postman
   var approved = (approvedStr === 'true' || approvedStr === true);
 
-  var newState = 0;
-
   Note.findById(noteId)
   .then(function(note){
     debug('Found note by noteId %s:\n%s', noteId, note);
@@ -262,22 +278,7 @@ exports.updateStateByManager = function (req, res, next){
       return Note.update(conditions, update, options)
       .then(function(changedInfo){
         debug('Update note info succeeded');
-
         res.send(changedInfo);
-
-        //refresh the page, I do not think it's right.
-        /*
-                return  _findNotesByManagerId(managerId)
-                  .then(function(notes){
-                    debug('Find all notes by manager preState, notes.length:' + notes.length);
-                    return res.send(notes);
-                    // res.render('examine', {
-                    //       title: "待审核假期",
-                    //       notes: notes
-                    // });
-                  });
-                  // .catch(next);
-        */
       });
     });
   })

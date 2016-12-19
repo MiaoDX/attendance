@@ -1,0 +1,90 @@
+extends ../layout
+
+block content
+  //- main container
+  .content
+    .container-fluid
+      #pad-wrapper.gallery
+        .row-fluid.header
+          h3 请假审批
+        // gallery wrapper
+        .gallery-wrapper
+          .row.gallery-row
+            #notesVue
+              #vfor(v-for="note in notes")
+                // single note
+                .span4.img-container
+                  .popup
+                    h5 请假条
+                    .thumb
+                      img(src='/img/gallery-preview.jpg')
+                    .title
+                      input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.user.userName")
+                      input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.holidayType.holidayName")
+                      input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.timeLength")
+                      input.inline-input(type='text', placeholder='Title', readonly='readonly', v-bind:value="note.startTime")
+                    .description
+                      h6 请假原因
+                      textarea(readonly='readonly', v-bind:value="note.reason")
+                      input.btn-glow.primary(type='submit', v-on:click="change_note_state_vue(note._id, false)", value='驳回')
+                      input.btn-glow.primary(type='submit', v-on:click="change_note_state_vue(note._id, true)", value='同意')
+                  //-  end single note
+          //- end gallery wrapper
+  //- end main container
+  // this page scripts
+  script(src='http://code.jquery.com/jquery-latest.js')
+  script(src='/js/bootstrap.min.js')
+  script(src='/js/theme.js')
+
+  script(src='//cdn.bootcss.com/vue/2.1.6/vue.js') // CDN
+  script(src="//cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js")
+
+  script(type='text/javascript').
+    $(function () {
+      var demo = new Vue({
+        el: '#notesVue',
+        data: {
+                notes:[
+                  ]
+        },
+        created: function () {
+          this.init();
+        },
+        methods: {
+          init: function () {
+               var that = this;
+               that.$resource('/api/notes/manager').get().then(function (resp) {
+                   // 调用API成功时调用json()异步返回结果:
+                   resp.json().then(function (result) {
+                       // 更新VM的todos:
+                       that.notes = result.notes;
+                   });
+               }, function (resp) {
+                   // 调用API失败:
+                   alert('error');
+               });
+          },
+          
+          
+          change_note_state_vue: function (noteId, approved) {
+              var that = this;
+              that.$resource('/api/notes/manager')
+              .save({
+                "noteId":noteId,
+                "approved":approved
+              }).then(function (resp) {
+                  // 调用API成功时调用json()异步返回结果:
+                  resp.json().then(function (result) {
+                      // 更新VM的todos:
+                      /*that.notes = result.notes;*/
+                      console.log(result);
+                      that.init(); // reqeury the data
+                  });
+              }, function (resp) {
+                  // 调用API失败:
+                  alert('error');
+              });
+          },
+        } // methods
+        }); // new Vue
+      }); //$(function

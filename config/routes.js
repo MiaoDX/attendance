@@ -71,9 +71,11 @@ module.exports = function(app){
   app.post('/note/new', User.signinRequired, Note.new);
 
   app.get('/notes/manager', User.signinRequired, Note.findManagerCanHandleNotes);
+  app.get('/api/notes/manager', User.signinRequired, Note.findManagerCanHandleNotes_API);
 
   // {"noteId":"58493eabd5d47f3948fe85ba","approved":true}, managerId can be found from session
-  app.post('/notes/manager', User.signinRequired, Note.updateStateByManager);
+  app.post('/notes/manager', User.signinRequired, Note.updateStateByManager);  
+  app.post('/api/notes/manager', User.signinRequired, Note.updateStateByManager); // this is alreay restful api
 
   //app.post('/user/reqHoliday',Note.reqHoliday);
 
