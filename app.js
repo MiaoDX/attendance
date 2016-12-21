@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var cors = require('cors');
 var session = require('express-session');
 
 //https://www.npmjs.com/package/connect-mongo
@@ -12,6 +12,7 @@ var mongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 
 var app = express();
+app.use(cors());
 
 app.locals.moment = require('moment');
 var dbUrl = 'mongodb://localhost/attendance';
